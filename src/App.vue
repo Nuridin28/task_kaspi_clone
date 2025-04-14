@@ -2,6 +2,18 @@
 import { ref } from "vue";
 import KaspiClientTransfer from "./components/KaspiClientTransfer.vue";
 import TransferHistory from "./components/TransferHistory.vue";
+import {
+  Globe,
+  QrCode,
+  UserSearch,
+  CreditCard,
+  Repeat,
+  Home,
+  MessageSquareMore,
+  Menu,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-static";
 
 const currentPage = ref("main");
 const activeTab = ref("transfers");
@@ -10,35 +22,35 @@ const transferOptions = [
   {
     id: 1,
     title: "Между своими счетами",
-    icon: "🔄",
+    iconComponent: Repeat,
     color: "text-red-500",
   },
   {
     id: 2,
     title: "Клиенту Kaspi",
     subtitle: "На карту Kaspi Gold",
-    icon: "👤",
+    iconComponent: UserSearch,
     color: "text-red-500",
   },
   {
     id: 3,
     title: "Карта другого банка",
     subtitle: "С карты на карту",
-    icon: "💳",
+    iconComponent: CreditCard,
     color: "text-red-500",
   },
   {
     id: 4,
     title: "Международные переводы",
     subtitle: "По номеру карты или телефона",
-    icon: "🌍",
+    iconComponent: Globe,
     color: "text-red-500",
   },
   {
     id: 5,
     title: "Kaspi QR",
     subtitle: "Сканируйте и платите",
-    icon: "📱",
+    iconComponent: QrCode,
     color: "text-red-500",
   },
 ];
@@ -65,7 +77,7 @@ const showHistory = () => {
 
   <div v-else class="min-h-screen bg-gray-100">
     <div class="bg-white px-4 py-3 flex items-center space-x-4">
-      <button class="text-gray-800">←</button>
+      <button class="text-gray-800"><span v-html="ArrowLeft" /></button>
       <h1 class="text-xl font-medium">Переводы</h1>
     </div>
 
@@ -96,11 +108,16 @@ const showHistory = () => {
       <div
         v-for="option in transferOptions"
         :key="option.id"
-        class="flex items-center justify-between py-4 border-b last:border-b-0"
+        class="flex items-center justify-between py-4 border-b last:border-b-0 cursor-pointer"
         @click="handleTransferClick(option.id)"
       >
         <div class="flex items-center space-x-4">
-          <span :class="option.color" class="text-2xl">{{ option.icon }}</span>
+          <span
+            :class="option.color"
+            class="text-2xl"
+            v-html="option.iconComponent"
+          />
+
           <div>
             <div class="font-medium">{{ option.title }}</div>
             <div v-if="option.subtitle" class="text-sm text-gray-500">
@@ -108,7 +125,7 @@ const showHistory = () => {
             </div>
           </div>
         </div>
-        <button class="text-gray-400">→</button>
+        <button class="text-gray-400"><span v-html="ArrowRight" /></button>
       </div>
     </div>
 
@@ -116,19 +133,17 @@ const showHistory = () => {
       class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2"
     >
       <button class="flex flex-col items-center text-gray-500 text-xs">
-        <span class="text-xl mb-1">🏠</span>
-        Главная
+        <span class="text-xl mb-1" v-html="Home" /> Главная
       </button>
       <button class="flex flex-col items-center text-gray-500 text-xs">
-        <span class="text-xl mb-1">📱</span>
-        Kaspi QR
+        <span class="text-xl mb-1" v-html="QrCode" /> Kaspi QR
       </button>
       <button class="flex flex-col items-center text-gray-500 text-xs">
-        <span class="text-xl mb-1">💬</span>
+        <span class="text-xl mb-1" v-html="MessageSquareMore" />
         Сообщения
       </button>
       <button class="flex flex-col items-center text-gray-500 text-xs">
-        <span class="text-xl mb-1">⚙️</span>
+        <span class="text-xl mb-1" v-html="Menu" />
         Сервисы
       </button>
     </div>

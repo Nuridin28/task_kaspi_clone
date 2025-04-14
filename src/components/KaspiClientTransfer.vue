@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-
+import { UserCircle2, QrCode, ArrowLeft } from "lucide-static";
 const activeTab = ref("phone");
 const phoneNumber = ref("");
 const amount = ref("");
@@ -37,6 +37,7 @@ const selectQuickMessage = (msg: string) => {
 
 const handleTransfer = () => {
   if (!amount.value || !phoneNumber.value) return;
+  // Handle transfer logic here
   console.log("Transfer:", {
     amount: amount.value,
     phoneNumber: phoneNumber.value,
@@ -47,11 +48,15 @@ const handleTransfer = () => {
 
 <template>
   <div class="min-h-screen bg-gray-100">
+    <!-- Header -->
     <div class="bg-white px-4 py-3 flex items-center space-x-4">
-      <button class="text-gray-800" @click="$emit('back')">←</button>
+      <button class="text-gray-800" @click="$emit('back')">
+        <span v-html="ArrowLeft" />
+      </button>
       <h1 class="text-xl font-medium">Клиенту Kaspi</h1>
     </div>
 
+    <!-- Card Balance -->
     <div class="bg-white mt-2 p-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -62,10 +67,11 @@ const handleTransfer = () => {
           </div>
           <span class="font-medium">Kaspi Gold</span>
         </div>
-        <span class="text-lg font-medium">262,70 ₸</span>
+        <span class="text-lg font-medium">262 000 ₸</span>
       </div>
     </div>
 
+    <!-- Transfer Method Tabs -->
     <div class="bg-white mt-2 p-4">
       <div class="flex space-x-2 mb-6">
         <button
@@ -87,10 +93,12 @@ const handleTransfer = () => {
           :class="activeTab === 'qr' ? 'bg-gray-100 text-blue-600' : ''"
           @click="activeTab = 'qr'"
         >
-          <span class="text-xl">📱</span> Kaspi QR
+          <span class="text-xl"><span class="text-2xl" v-html="QrCode" /></span>
+          Kaspi QR
         </button>
       </div>
 
+      <!-- Phone Input -->
       <div v-if="activeTab === 'phone'" class="mb-4">
         <label class="text-sm text-blue-600">Телефон получателя</label>
         <div class="flex items-center mt-1 border-b border-blue-600">
@@ -103,15 +111,18 @@ const handleTransfer = () => {
             maxlength="15"
             class="flex-1 bg-transparent outline-none pl-1 pr-2 py-1"
           />
-          <button class="text-red-500 -ml-1">👤</button>
+          <button class="text-red-500 -ml-1">
+            <span class="text-2xl" v-html="UserCircle2" />
+          </button>
         </div>
       </div>
 
+      <!-- Card Input -->
       <div v-if="activeTab === 'card'" class="mb-4">
         <label class="text-sm text-blue-600">Kaspi Gold получателя</label>
-        <div class="flex items-center mt-1 border-b border-blue-600">
+        <div class="flex items-center mt-1 border-b border-blue-600 py-6">
           <div
-            class="bg-yellow-500 w-8 h-8 rounded-lg flex items-center justify-center text-white mr-2"
+            class="bg-yellow-500 w-8 h-8 rounded-lg flex items-center justify-center text-white mr-2 p-6"
           >
             👥
           </div>
@@ -124,6 +135,7 @@ const handleTransfer = () => {
         </div>
       </div>
 
+      <!-- QR Scanner -->
       <div v-if="activeTab === 'qr'" class="mb-4">
         <div class="bg-black rounded-lg p-4 aspect-square relative">
           <div class="absolute inset-0 flex items-center justify-center">
@@ -169,19 +181,21 @@ const handleTransfer = () => {
         </div>
       </div>
 
+      <!-- Amount Input -->
       <div
         v-if="activeTab !== 'qr'"
-        class="flex bg-gray-100 rounded-lg p-4 mb-4"
+        class="flex bg-gray-100 rounded-lg p-4 mb-4 items-center space-x-2"
       >
         <input
           type="number"
           v-model="amount"
           placeholder="0"
-          class="text-2xl font-medium bg-transparent w-full outline-none no-spinner"
+          class="text-2xl font-medium bg-transparent w-full outline-none no-spinner text-left"
         />
         <span class="text-2xl font-medium">₸</span>
       </div>
 
+      <!-- Message Input -->
       <div v-if="activeTab !== 'qr'" class="bg-gray-100 rounded-lg p-4 mb-4">
         <input
           type="text"
@@ -195,6 +209,7 @@ const handleTransfer = () => {
         </div>
       </div>
 
+      <!-- Quick Messages -->
       <div v-if="activeTab !== 'qr'" class="flex space-x-2 mb-6">
         <button
           v-for="msg in quickMessages"
@@ -207,6 +222,7 @@ const handleTransfer = () => {
       </div>
     </div>
 
+    <!-- Transfer Button -->
     <div
       v-if="activeTab !== 'qr'"
       class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t"
